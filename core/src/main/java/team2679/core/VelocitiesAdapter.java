@@ -188,6 +188,29 @@ public class VelocitiesAdapter {
         return null;
     }
 
+    public double[] velocityForTime(double t) {
+        double time = 0;
+        double lastTime = 0;
+        for (int i = 0; i<rPoints.size()-1; i++) {
+            lastTime = time;
+            time += distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
+            if (t >= lastTime && t < time) {
+                double rm = (rPoints.get(i+1).y - rPoints.get(i).y) / (rPoints.get(i+1).x - rPoints.get(i).x);
+                double rb = rPoints.get(i).y - rm * rPoints.get(i).x;
+                double lm = (lPoints.get(i+1).y - lPoints.get(i).y) / (lPoints.get(i+1).x - lPoints.get(i).x);
+                double lb = lPoints.get(i).y - rm * lPoints.get(i).x;
+                double rv = rm * t + rb;
+                double lv = lm * t + lb;
+                if (rv == 0.0) {
+                    System.out.println("rm: " + rm + ", rb: " + rb + ", time: " + time);
+                }
+                return new double[] {rv, lv};
+            }
+        }
+        System.out.println("A problem has occurred");
+        return null;
+    }
+
     /**
      * @return Number of points in the spline (depends on the lambda parameter in the constructor.
      */

@@ -1,5 +1,9 @@
 package team2679.core;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
+import java.util.Arrays;
+
 public class visualize {
 
     public static void main(String[] args) {
@@ -12,12 +16,19 @@ public class visualize {
 
         System.out.println(vs.getDuration());
 
-        double[][] velocities = new double[((int)vs.getDuration()) * 100][2];
+        int duration = (int)vs.getDuration();
+        int length = duration * 100;
+        double[][] velocities = new double[length][2];
+        System.out.println("Duration: " + duration + ", length: " + length);
+        int index = 0;
 
-        for (double i = 0; i<((int)vs.getDuration()); i+=0.01) {
-            velocities[(int)(i*100)] = vs.getVelocities(i);
+        for (double i = 0; i<duration-0.01; i+=0.01) {
+            velocities[index] = vs.velocityForTime(i);
+            index++;
         }
 
+        vs.saveCSV(vs.velocities, "velocities.csv");
+        vs.saveCSV(vs.getMaxVelocities(100), "v", "mves.csv");
         vs.saveCSV(velocities, "ves.csv");
 
     }
