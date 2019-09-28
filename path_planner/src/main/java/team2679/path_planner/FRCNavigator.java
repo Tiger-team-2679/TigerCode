@@ -2,22 +2,25 @@ package team2679.path_planner;
 
 import team2679.core.*;
 import team2679.core.Point;
+import team2679.core.WindowListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class FRCNavigator extends JPanel implements MouseListener, MouseMotionListener {
 
-    String imagePath = "fieldImage.jpg";
+    String imagePath = "fieldImage.png";
     String[] splineType = {"BSpline"};
     Color[] splineColors = {Color.green};
     double wheelDistance = 15;
 
     // Members:
+    LinkedList<WindowListener> listeners = new LinkedList<>();
     Spline[] spline = new Spline[splineType.length];
     Image map = getImage(imagePath);
     FileManager fm = new FileManager();
@@ -56,6 +59,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
                     fm.setPath(savePath);
                     fm.save(points);
                 }
+
+                for (WindowListener listener : listeners) {
+                    listener.onClose();
+                }
             }
         });
 
@@ -71,6 +78,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     public void saveAtEnd(boolean save, String path) {
         this.save = save;
         this.savePath = path;
+    }
+
+    public void addWindowListener(WindowListener listener) {
+        listeners.add(listener);
     }
 
     private Rectangle getRect(int[] rect) {
@@ -103,7 +114,8 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
                     System.out.println("Unresolved splineType! Available: BSpline, HermiteSpline");
             }
         }
-        vs.init(spline[0]);
+        if (points.size() > 2)
+            vs.init(spline[0]);
     }
 
     /**
@@ -130,7 +142,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         try {
             tempImage = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource(path));
         } catch (Exception e) {
-            System.out.println("error: " + e.getMessage());
+            e.printStackTrace();
         }
         return tempImage;
     }

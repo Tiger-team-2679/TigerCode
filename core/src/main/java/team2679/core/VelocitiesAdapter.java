@@ -167,27 +167,9 @@ public class VelocitiesAdapter {
 
     /**
      * Get velocities for a given point in time.
-     * @param time
+     * @param t
      * @return
      */
-    public double[] getVelocities(double time) {
-        double t = 0;
-        for (int i = 1; i < rPoints.size(); i++) {
-            double lastT = t;
-            t += distance(rPoints.get(i-1), rPoints.get(i)) / velocities[i-1][0];
-            if (time >= lastT && time <= t){
-                double rm = (rPoints.get(i).y - rPoints.get(i-1).y) / (rPoints.get(i).x - rPoints.get(i-1).x);
-                double rb = rPoints.get(i).y - (rm * rPoints.get(i).x);
-                double rv = rm * time + rb;
-                double lm = (lPoints.get(i).y - lPoints.get(i-1).y) / (lPoints.get(i).x - lPoints.get(i-1).x);
-                double lb = lPoints.get(i).y - (rm * lPoints.get(i).x);
-                double lv = lm * time + lb;
-                return new double[] {rv, lv};
-            }
-        }
-        return null;
-    }
-
     public double[] velocityForTime(double t) {
         double time = 0;
         double lastTime = 0;
@@ -198,9 +180,11 @@ public class VelocitiesAdapter {
                 double rm = (rPoints.get(i+1).y - rPoints.get(i).y) / (rPoints.get(i+1).x - rPoints.get(i).x);
                 double rb = rPoints.get(i).y - rm * rPoints.get(i).x;
                 double lm = (lPoints.get(i+1).y - lPoints.get(i).y) / (lPoints.get(i+1).x - lPoints.get(i).x);
-                double lb = lPoints.get(i).y - rm * lPoints.get(i).x;
-                double rv = rm * t + rb;
-                double lv = lm * t + lb;
+                double lb = lPoints.get(i).y - lm * lPoints.get(i).x;
+                double rx = (t - lastTime) * velocities[i][0] + rPoints.get(i).x;
+                double lx = (t - lastTime) * velocities[i][1] + lPoints.get(i).x;
+                double rv = rm * rx + rb;
+                double lv = lm * lx + lb;
                 if (rv == 0.0) {
                     System.out.println("rm: " + rm + ", rb: " + rb + ", time: " + time);
                 }
@@ -209,6 +193,26 @@ public class VelocitiesAdapter {
         }
         System.out.println("A problem has occurred");
         return null;
+    }
+
+    public double[] getVelocities(double t) {
+        double time = 0;
+        double lastTime = 0;
+        for (int i = 0; i<rPoints.size()-1; i++) {
+            lastTime = time;
+            time += distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
+            if (t >= lastTime && t < time)
+                return new double[] {velocities[i][0], velocities[i][1]};
+        }
+        System.out.println("A problem has occurred");
+        return null;
+    }
+
+    private ArrayList<Point> twoPoints(Point p1, Point p2) {
+        ArrayList<Point> points = new ArrayList<>();
+        points.add(p1);
+        points.add(p2);
+        return points;
     }
 
     /**
@@ -226,7 +230,7 @@ public class VelocitiesAdapter {
     public void saveCSV(double[][] ves, String path){
         try {
             Formatter formatter = new Formatter(path + (path.endsWith(".csv")?"":".csv"));
-            formatter.format("%s", "Right Speed, Left Speed\r\n");
+            formatter.format("%s", "Right, Left\r\n");
             for (int i = 0; i<ves.length; i++) {
                 formatter.format("%s", ves[i][0] + ", " + ves[i][1] + "\r\n");
             }
