@@ -7,7 +7,6 @@ import team2679.core.WindowListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -115,7 +114,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             }
         }
         if (points.size() > 2)
-            vs.init(spline[0]);
+            vs.update(spline[0]);
     }
 
     /**
@@ -240,7 +239,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      */
     private int inRange(MouseEvent e) {
         for (Point p : points) {
-            if (vs.distance(p, new Point(e.getX(), e.getY())) <= 10) {
+            if (Util.distance(p, new Point(e.getX(), e.getY())) <= 10) {
                 return points.indexOf(p);
             }
         }
@@ -274,7 +273,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         double[][] ps = getSplinePoints(numberOfPoints, splineIndex);
         double length = 0;
         for (int i = 0; i < ps.length - 1; i++) {
-            length += vs.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
+            length += Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
         }
         return length;
     }
@@ -288,7 +287,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         fm.setPath(path);
         spline[0] = fm.load(splineType[0]);
         points = spline[0].getPoints();
-        vs.init(spline[0]);
+        vs.update(spline[0]);
         repaint();
     }
 
