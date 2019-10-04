@@ -2,6 +2,7 @@ package team2679.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -78,11 +79,50 @@ public class FileManager {
     }
 
     /**
+     * Saves an array in a .csv format.
+     * @param ves
+     * @param path
+     */
+    public void saveCSV(double[][] ves, String path){
+        try {
+            Formatter formatter = new Formatter(path + (path.endsWith(".csv")?"":".csv"));
+            formatter.format("%s", "Right, Left\r\n");
+            for (int i = 0; i<ves.length; i++) {
+                formatter.format("%s", ves[i][0] + ", " + ves[i][1] + "\r\n");
+            }
+            formatter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Saves an array in a .csv format.
+     * @param ves
+     * @param label
+     * @param path
+     */
+    public void saveCSV(double[] ves, String label, String path){
+        try {
+            Formatter formatter = new Formatter(path + (path.endsWith(".csv")?"":".csv"));
+            formatter.format("%s", label + "\r\n");
+            for (int i = 0; i<ves.length; i++) {
+                if(i % 4 == 0)
+                    formatter.format("%s", ves[i] + "\r\n");
+            }
+            formatter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * @param path
      * @return
      */
     private String validatePath(String path){
-        return path.equals("default")?"/home/tiger/TigerCode/core/src/main/java/team2679/core/points.txt":path + (path.endsWith(".txt")?"":".txt");
+        URL url = getClass().getResource("points.txt");
+        return path.equals("default")?url.getPath():path + (path.endsWith(".txt")?"":".txt");
     }
 
 }

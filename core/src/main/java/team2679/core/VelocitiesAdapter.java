@@ -42,22 +42,9 @@ public class VelocitiesAdapter {
      * Update the spline.
      * @param spline
      */
-    public void init(Spline spline){
+    public void update(Spline spline){
         this.spline = spline;
         wheelsSplines(wheelDistance, (int)(spline.getLength() * lengthOp));
-    }
-
-    /**
-     * Calculates the distance in pxs between two given points.
-     *
-     * @param point1
-     * @param point2
-     * @return
-     */
-    public double distance(Point point1, Point point2) {
-        double deltaX = point2.x - point1.x;
-        double deltaY = point2.y - point1.y;
-        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
     }
 
     /**
@@ -112,7 +99,7 @@ public class VelocitiesAdapter {
      * @return
      */
     private boolean rightSide(double rx, double ry, double distance){
-        return distance(new Point(rx, ry), rPoints.get(rPoints.size()-1)) < distance;
+        return Util.distance(new Point(rx, ry), rPoints.get(rPoints.size()-1)) < distance;
     }
 
     /**
@@ -124,8 +111,8 @@ public class VelocitiesAdapter {
     private double[][] getGeneralVelocities(double wheelDistance, double timeForStep){
         double[][] velocities = new double[rPoints.size()-1][2]; // 0 = right, 1 = left
         for (int i = 0; i<velocities.length; i++){
-            velocities[i][0] = distance(rPoints.get(i), rPoints.get(i+1)) / timeForStep;
-            velocities[i][1] = distance(lPoints.get(i), lPoints.get(i+1)) / timeForStep;
+            velocities[i][0] = Util.distance(rPoints.get(i), rPoints.get(i+1)) / timeForStep;
+            velocities[i][1] = Util.distance(lPoints.get(i), lPoints.get(i+1)) / timeForStep;
         }
         return velocities;
     }
@@ -137,30 +124,46 @@ public class VelocitiesAdapter {
      * @return
      */
     public double[] velocity(int index, double basicSpeed){
-        double dis = distance(new Point(points[index][0], points[index][1]),
+        double dis = Util.distance(new Point(points[index][0], points[index][1]),
                 new Point(points[index+1][0], points[index+1][1]));
         double time = dis / basicSpeed;
-        double rightV = distance(rPoints.get(index), rPoints.get(index+1)) / time;
-        double leftV = distance(lPoints.get(index), lPoints.get(index+1)) / time;
+        double rightV = Util.distance(rPoints.get(index), rPoints.get(index+1)) / time;
+        double leftV = Util.distance(lPoints.get(index), lPoints.get(index+1)) / time;
         velocities[index][0] = rightV;
         velocities[index][1] = leftV;
         return new double[]{rightV, leftV}; // 0 = right, 1 = left
     }
 
-    public void velocities(double[] basicSpeeds) {
+    /**
+     * Set motors velocities by passing an array of basic speeds for the robot.
+     * This method calls velocity() iteratively.
+     * @param basicSpeeds
+     */
+    public void setVelocities(double[] basicSpeeds) {
         for (int i = 0; i<basicSpeeds.length; i++) {
             velocity(i, basicSpeeds[i]);
         }
     }
 
+    /**
+     * Set motors velocities by passing the max possible velocity for the motor.
+     * This method calculates the maximum velocity of the robot at each point on the path given the max motor velocity,
+     * and then passes result to setVelocities() to find velocities for each of the motors.
+     * Final velocities will be saved in 'velocities[][]'.
+     * @param motorMaxVelocity
+     */
     public void setMaxVelocities(double motorMaxVelocity) {
-        velocities(getMaxVelocities(motorMaxVelocity));
+        setVelocities(getMaxVelocities(motorMaxVelocity));
     }
 
+    /**
+     * Returns the time duration for driving along the path, using velocities that should have already been set.
+     * @return
+     */
     public double getDuration() {
         double sum = 0;
         for (int i = 0; i < velocities.length-1; i++) {
-            sum += distance(rPoints.get(i), rPoints.get(i + 1)) / velocities[i][0];
+            sum += Util.distance(rPoints.get(i), rPoints.get(i + 1)) / velocities[i][0];
         }
         return sum;
     }
@@ -175,7 +178,7 @@ public class VelocitiesAdapter {
         double lastTime = 0;
         for (int i = 0; i<rPoints.size()-1; i++) {
             lastTime = time;
-            time += distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
+            time += Util.distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
             if (t >= lastTime && t < time) {
                 double rm = (rPoints.get(i+1).y - rPoints.get(i).y) / (rPoints.get(i+1).x - rPoints.get(i).x);
                 double rb = rPoints.get(i).y - rm * rPoints.get(i).x;
@@ -200,19 +203,12 @@ public class VelocitiesAdapter {
         double lastTime = 0;
         for (int i = 0; i<rPoints.size()-1; i++) {
             lastTime = time;
-            time += distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
+            time += Util.distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
             if (t >= lastTime && t < time)
                 return new double[] {velocities[i][0], velocities[i][1]};
         }
         System.out.println("A problem has occurred");
         return null;
-    }
-
-    private ArrayList<Point> twoPoints(Point p1, Point p2) {
-        ArrayList<Point> points = new ArrayList<>();
-        points.add(p1);
-        points.add(p2);
-        return points;
     }
 
     /**
@@ -262,8 +258,8 @@ public class VelocitiesAdapter {
     public double[] getMaxVelocities(double motorMaxVelocity){
         double[] maxVelocities = new double[getNumPoints()-1];
         for (int i = 0; i<maxVelocities.length; i++){
-            double[] ds = {distance(rPoints.get(i), rPoints.get(i+1)),
-                    distance(lPoints.get(i), lPoints.get(i+1))};
+            double[] ds = {Util.distance(rPoints.get(i), rPoints.get(i+1)),
+                    Util.distance(lPoints.get(i), lPoints.get(i+1))};
             int longI = ds[0] > ds[1]?0:1;
             double t = ds[longI] / motorMaxVelocity;
             double v2 = ds[1 - longI] / t;

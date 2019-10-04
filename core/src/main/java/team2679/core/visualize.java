@@ -1,10 +1,5 @@
 package team2679.core;
 
-import team2679.path_planner.FRCNavigator;
-
-import java.io.IOException;
-import java.util.Arrays;
-
 public class visualize {
 
     public static void main(String[] args) {
