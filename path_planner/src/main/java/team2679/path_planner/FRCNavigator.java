@@ -7,8 +7,13 @@ import team2679.core.WindowListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+import team2679.core.MappingProvider;
 
 
 public class FRCNavigator extends JPanel implements MouseListener, MouseMotionListener {
@@ -22,14 +27,13 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     LinkedList<WindowListener> listeners = new LinkedList<>();
     Spline[] spline = new Spline[splineType.length];
     Image map = getImage(imagePath);
-    FileManager fm = new FileManager();
     int mapWidth;
     int mapHeight;
-    ArrayList<Point> points = new ArrayList<>();
+    List<Point> points = new ArrayList<>();
     boolean save = false;
     String savePath = "";
     int[] eraser = null;
-    VelocitiesAdapter vs = new VelocitiesAdapter(wheelDistance, 0.5);
+    Velocities vs = new Velocities(wheelDistance, 0.5);
 
 
      /**
@@ -55,8 +59,16 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             @Override
             public void windowClosing(WindowEvent e) {
                 if (save) {
-                    fm.setPath(savePath);
-                    fm.save(points);
+                    try {
+                        MappingProvider.pointWriter.writeValues(new File(savePath)).writeAll(points);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(frame,
+                                "Error saving path file.",
+                                "File error",
+                                JOptionPane.WARNING_MESSAGE);
+
+                    }
                 }
 
                 for (WindowListener listener : listeners) {
@@ -96,7 +108,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      *
      * @param points
      */
-    public void reinitializeSpline(ArrayList<Point> points) {
+    public void reinitializeSpline(List<Point> points) {
         for (int i = 0; i < spline.length; i++) {
             switch (splineType[i]) {
                 case "BSpline":
@@ -114,7 +126,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             }
         }
         if (points.size() > 2)
-            vs.update(spline[0]);
+            vs.update(new Path(spline[0]));
     }
 
     /**
@@ -284,10 +296,17 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      * @param path Can be passed with "default" to load the points from a default path (current directory).
      */
     public void load(String path) {
-        fm.setPath(path);
-        spline[0] = fm.load(splineType[0]);
+        try {
+            points = MappingProvider.pointReader.readValue(new File(path));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Eggs are not supposed to be green.",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+
+        }
         points = spline[0].getPoints();
-        vs.update(spline[0]);
+        vs.update(new Path(spline[0]));
         repaint();
     }
 

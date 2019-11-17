@@ -1,12 +1,13 @@
 package team2679.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Path {
 
     private Spline spline;
-    private ArrayList<Point> controlPoints;
-    private ArrayList<Point> points;
+    private List<Point> controlPoints;
+    private List<Point> points;
 
     public Path(Spline spline) {
         this.spline = spline;
@@ -27,7 +28,7 @@ public class Path {
      * @param numberOfPoints
      * @return
      */
-    public ArrayList<Point> getPoints(int numberOfPoints) {
+    public List<Point> getPoints(int numberOfPoints) {
         ArrayList<Point> splinePoints = new ArrayList<>();
         for (double i = 0; i < numberOfPoints; i++) {
             double percent = i / numberOfPoints;
@@ -36,22 +37,20 @@ public class Path {
         return splinePoints;
     }
 
-    public void setPoints(ArrayList<Point> points) {
+    public void setPoints(List<Point> points) {
         this.points = points;
     }
 
-    public ArrayList<Point> getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
 
-    public ArrayList<Point> getControlPoints() {
+    public List<Point> getControlPoints() {
         return controlPoints;
     }
 
     public Spline getSpline() {
         return spline;
     }
-
-
 
 }

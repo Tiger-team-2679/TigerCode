@@ -1,13 +1,13 @@
 package team2679.core;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Velocities {
 
     private Path path;
-    private ArrayList<Point> rPoints = new ArrayList<>();
-    private ArrayList<Point> lPoints = new ArrayList<>();
+    public ArrayList<Point> rPoints = new ArrayList<>();
+    public ArrayList<Point> lPoints = new ArrayList<>();
     private double[][] velocities;
     private double lengthOp;
     private double wheelDistance;
@@ -37,7 +37,7 @@ public class Velocities {
      * @param numberOfPoints
      */
     private  void wheelsSplines(double distance, int numberOfPoints){
-        ArrayList<Point> splinePoints = path.getPoints(numberOfPoints);
+        List<Point> splinePoints = path.getPoints(numberOfPoints);
         path.setPoints(splinePoints);
         velocities = new double[splinePoints.size() - 2][2];
         rPoints = new ArrayList<>();

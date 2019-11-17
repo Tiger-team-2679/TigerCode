@@ -1,11 +1,11 @@
 package team2679.core;
-import java.util.ArrayList;
+import java.util.List;
 
 public class HermiteSpline implements Spline{
 
-    private ArrayList<Point> controlPoints;
+    private List<Point> controlPoints;
 
-    public HermiteSpline(ArrayList<Point> controlPoints) throws Exception {
+    public HermiteSpline(List<Point> controlPoints) throws Exception {
         if(controlPoints.size() < 4){
             throw new Exception("Hermite Cubic spline must have at least 4 points");
         }
@@ -63,7 +63,7 @@ public class HermiteSpline implements Spline{
     }
 
     @Override
-    public ArrayList<Point> getPoints() {
+    public List<Point> getPoints() {
         return controlPoints;
     }
 

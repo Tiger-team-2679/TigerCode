@@ -1,6 +1,6 @@
 package team2679.core;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface Spline {
 
@@ -10,6 +10,6 @@ public interface Spline {
 
     public double getLength();
 
-    ArrayList<Point> getPoints();
+    List<Point> getPoints();
 
 }
