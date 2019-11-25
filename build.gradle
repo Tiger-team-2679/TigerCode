@@ -10,6 +10,9 @@ plugins {
 // We need to apply 'idea' to all projects, including the root project (here).
 allprojects {
     apply plugin: "idea"
+    repositories {
+        mavenCentral()
+    }
 }
 
 

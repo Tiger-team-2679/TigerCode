@@ -1,9 +1,7 @@
 package team2679.path_planner;
 
-import team2679.core.BSpline;
-import team2679.core.Point;
-import team2679.core.Spline;
-import team2679.core.VelocitiesAdapter;
+import team2679.core.*;
+import team2679.core.Velocities;
 
 import java.util.ArrayList;
 
@@ -22,8 +20,7 @@ public class Example3 {
 
         Spline spline = new BSpline(points);
 
-        VelocitiesAdapter vs = new VelocitiesAdapter(spline, 15, 0.5);
-        System.out.println(vs.getNumPoints());
+        Velocities vs = new Velocities(new Path(spline), 15, 0.5);
 
         // Print velocities:
         for (int i : vs.iterate()){

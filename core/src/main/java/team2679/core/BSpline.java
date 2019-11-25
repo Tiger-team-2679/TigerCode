@@ -8,6 +8,7 @@
  */
 
 import java.util.ArrayList;
+import java.util.List;
 
  /**
   * Interpolates points given in the 2D plane. The resulting spline
@@ -25,7 +26,7 @@ import java.util.ArrayList;
      private double[] t;
      private BSplineTools splineX;
      private BSplineTools splineY;
-     ArrayList<Point> points = new ArrayList<>();
+     List<Point> points = new ArrayList<>();
 
      /**
       * Total length tracing the points on the spline
@@ -36,7 +37,7 @@ import java.util.ArrayList;
       * Creates a new BSpline.
       * @param points
       */
-     public BSpline(ArrayList<Point> points) {
+     public BSpline(List<Point> points) {
          this.points = points;
          double[] x = new double[points.size()];
          double[] y = new double[points.size()];
@@ -137,7 +138,7 @@ import java.util.ArrayList;
      }
 
      @Override
-     public ArrayList<Point> getPoints() {
+     public List<Point> getPoints() {
          return points;
      }
 
