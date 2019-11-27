@@ -300,9 +300,9 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             points = MappingProvider.pointReader.<Point>readValues(new File(path)).readAll();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    "Eggs are not supposed to be green.",
-                    "Inane warning",
-                    JOptionPane.WARNING_MESSAGE);
+                    "Error loading points from " + path,
+                    "File error",
+                    JOptionPane.ERROR_MESSAGE);
 
         }
         points = spline[0].getPoints();
