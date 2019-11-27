@@ -297,7 +297,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      */
     public void load(String path) {
         try {
-            points = MappingProvider.pointReader.readValue(new File(path));
+            points = MappingProvider.pointReader.<Point>readValues(new File(path)).readAll();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     "Eggs are not supposed to be green.",
