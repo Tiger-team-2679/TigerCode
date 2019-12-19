@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="TigerCode.core.main" target="1.10" />
+      <module name="TigerCode.core.test" target="1.10" />
+      <module name="TigerCode.path_planner.main" target="1.10" />
+      <module name="TigerCode.path_planner.test" target="1.10" />
+      <module name="TigerCode.robot.main" target="1.10" />
+      <module name="TigerCode.robot.test" target="1.10" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

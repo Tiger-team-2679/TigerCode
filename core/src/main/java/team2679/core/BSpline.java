@@ -142,13 +142,13 @@ import java.util.List;
          return points;
      }
 
+     /**
+      * Get a point on the spline
+      * @param percent
+      * @return
+      */
      @Override
-     public double interpolate_X(double percent) {
-         return getPoint(percent)[0];
-     }
-
-     @Override
-     public double interpolate_Y(double percent) {
-         return getPoint(percent)[1];
+     public Point interpolatePoint(double percent) {
+        return new Point(splineX.getValue(percent), splineY.getValue(percent));
      }
  }

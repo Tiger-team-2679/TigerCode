@@ -18,22 +18,24 @@ import team2679.core.MappingProvider;
 
 public class FRCNavigator extends JPanel implements MouseListener, MouseMotionListener {
 
-    String imagePath = "fieldImage.png";
-    String[] splineType = {"BSpline"};
-    Color[] splineColors = {Color.green};
-    double wheelDistance = 15;
+    // Constants
+    final String IMAGE_PATH = "fieldImage.png";
+    final String[] SPLINE_TYPE = {"BSpline"};
+    final Color[] SPLINE_COLORS = {Color.green};
+    final double WHEEL_DISTANCE = 15;
+
+    final Image MAP = getImage(IMAGE_PATH);
 
     // Members:
     LinkedList<WindowListener> listeners = new LinkedList<>();
-    Spline[] spline = new Spline[splineType.length];
-    Image map = getImage(imagePath);
+    Spline[] spline = new Spline[SPLINE_TYPE.length];
     int mapWidth;
     int mapHeight;
     List<Point> points = new ArrayList<>();
     boolean save = false;
     String savePath = "";
     int[] eraser = null;
-    Velocities vs = new Velocities(wheelDistance, 0.5);
+    Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
 
 
      /**
@@ -41,14 +43,14 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      */
     public FRCNavigator() {
 
-        map.getWidth(this);
-        map.getHeight(this);
+        MAP.getWidth(this);
+        MAP.getHeight(this);
         wait(1000);
 
         // Set JFrame
         JFrame frame = new JFrame("Tiger Team Navigator");
         frame.add(this);
-        frame.setSize(map.getWidth(this), map.getHeight(this) + 30);
+        frame.setSize(MAP.getWidth(this), MAP.getHeight(this) + 30);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
@@ -110,7 +112,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      */
     public void reinitializeSpline(List<Point> points) {
         for (int i = 0; i < spline.length; i++) {
-            switch (splineType[i]) {
+            switch (SPLINE_TYPE[i]) {
                 case "BSpline":
                     spline[i] = new BSpline(points);
                     break;
@@ -167,7 +169,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(map, 0, 0, this);
+        g2d.drawImage(MAP, 0, 0, this);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setStroke(new BasicStroke(4));
@@ -184,11 +186,12 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         if (spline[0] != null) {
             for (int j = 0; j < spline.length; j++) {
                 Polygon p = new Polygon();
-                g2d.setColor(splineColors[j]);
+                g2d.setColor(SPLINE_COLORS[j]);
                 for (double i = 0; i <= 1; i += 0.0001) {
-                    p.addPoint((int) spline[j].interpolate_X(i), (int) spline[j].interpolate_Y(i));
+                    Point point = spline[j].interpolatePoint(i);
+                    p.addPoint((int) point.x, (int) point.y);
                 }
-                g2d.setColor(splineColors[j]);
+                g2d.setColor(SPLINE_COLORS[j]);
                 g2d.setStroke(new BasicStroke(3));
                 g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
             }
@@ -268,8 +271,9 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     private double[][] getSplinePoints(int numberOfPoints, int splineIndex) {
         double[][] splinePoints = new double[numberOfPoints][2];
         for (double i = 0; i < numberOfPoints; i++) {
-            splinePoints[(int) i][0] = spline[splineIndex].interpolate_X(i / numberOfPoints);
-            splinePoints[(int) i][1] = spline[splineIndex].interpolate_Y(i / numberOfPoints);
+            Point point = spline[splineIndex].interpolatePoint(i / numberOfPoints);
+            splinePoints[(int) i][0] = point.x;
+            splinePoints[(int) i][1] = point.y;
         }
         return splinePoints;
     }
