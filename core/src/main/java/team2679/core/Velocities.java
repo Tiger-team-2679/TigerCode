@@ -39,11 +39,11 @@ public class Velocities {
     private  void wheelsSplines(double distance, int numberOfPoints){
         List<Point> splinePoints = path.getPoints(numberOfPoints);
         path.setPoints(splinePoints);
-        velocities = new double[splinePoints.size() - 1][2];
+        velocities = new double[splinePoints.size() - 2][2];
         rPoints = new ArrayList<>();
         lPoints = new ArrayList<>();
         for (int i = 0; i<splinePoints.size()-1; i++){
-            double m = (splinePoints.get(i+1).y - splinePoints.get(i).y) / (splinePoints.get(i+1).x - splinePoints.get(i).x); // (y2 - y1) / (x2 - x1)
+            double m = (splinePoints.get(i+1).y - splinePoints.get(i).y) / (splinePoints.get(i+1).x - splinePoints.get(i).y); // (y2 - y1) / (x2 - x1)
             m = -1.0 / m;
             double delta = distance * (Math.sqrt(1.0 / (1 + Math.pow(m, 2))));
             double rx = splinePoints.get(i).x + delta;

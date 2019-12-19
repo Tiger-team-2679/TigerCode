@@ -32,7 +32,7 @@ public class Path {
         ArrayList<Point> splinePoints = new ArrayList<>();
         for (double i = 0; i < numberOfPoints; i++) {
             double percent = i / numberOfPoints;
-            splinePoints.add(spline.interpolatePoint(percent));
+            splinePoints.add(new Point(spline.interpolate_X(percent), spline.interpolate_Y(percent)));
         }
         return splinePoints;
     }
