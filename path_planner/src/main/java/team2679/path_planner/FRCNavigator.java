@@ -118,7 +118,6 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             case "BSpline":
                 spline = new BSpline(points);
                 if (points.size() > 2) {
-                    vs = new Velocities(WHEEL_DISTANCE, 0.5);
                     vs.update(new Path(spline));
                 }
                 break;
@@ -129,7 +128,6 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
                     e.printStackTrace();
                 }
                 if (points.size() > 5) {
-                    vs = new Velocities(WHEEL_DISTANCE, 0.5);
                     vs.update(new Path(spline));
                 }
                 break;
@@ -203,7 +201,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
         }
 
-        if (points.size() > 1) {
+        if (!("HermiteSpline".equals(splineType)) && points.size() > 1) {
             Polygon right = new Polygon();
             Polygon left = new Polygon();
             for (Point p : vs.rPoints) {
@@ -343,7 +341,8 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
 
         draggingPoint = inRange(mouseEvent);
 
-        if (SwingUtilities.isRightMouseButton(mouseEvent)) {
+        if (SwingUtilities.isRightMouseButton(mouseEvent) && !(splineType.equals("HermiteSpline") && points.size() <= 4)
+                && !(points.size() <= 2)) {
             if (draggingPoint != -1) {
                 points.remove(draggingPoint);
                 reinitializeSpline(points);
@@ -362,7 +361,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             reinitializeSpline(points);
         }
 
-        if (points.size() > 4)
+        if (points.size() >= 4)
             Menu.hermiteSpline.setEnabled(true);
         else
             Menu.hermiteSpline.setEnabled(false);
