@@ -4,9 +4,7 @@ import java.util.List;
 
 public interface Spline {
 
-    public double interpolate_X(double percent);
-
-    public double interpolate_Y(double percent);
+    public Point interpolatePoint(double percent);
 
     public double getLength();
 

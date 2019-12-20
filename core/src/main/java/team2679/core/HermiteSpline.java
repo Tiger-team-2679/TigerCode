@@ -67,6 +67,11 @@ public class HermiteSpline implements Spline{
         return controlPoints;
     }
 
+    @Override
+    public Point interpolatePoint(double percent) {
+        return new Point(interpolate_X(percent), interpolate_Y(percent));
+    }
+
     public double get_length(int num_of_samples) throws Exception {
         return 0;
     }
