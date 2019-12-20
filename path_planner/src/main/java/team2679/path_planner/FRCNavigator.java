@@ -16,27 +16,26 @@ import java.util.List;
 import team2679.core.MappingProvider;
 
 
-public class FRCNavigator extends JPanel implements MouseListener, MouseMotionListener {
+public class FRCNavigator extends JPanel implements MouseListener, MouseMotionListener, MenuItems {
 
     // Constants
     final String IMAGE_PATH = "fieldImage.png";
-    final String[] SPLINE_TYPE = {"BSpline"};
-    final Color[] SPLINE_COLORS = {Color.green};
+    final Color SPLINE_COLOR = Color.green;
     final double WHEEL_DISTANCE = 15;
-
     final Image MAP = getImage(IMAGE_PATH);
+    final int TOP_PAD = 30;
 
     // Members:
+    Spline spline;
+    String splineType = "BSpline";
     LinkedList<WindowListener> listeners = new LinkedList<>();
-    Spline[] spline = new Spline[SPLINE_TYPE.length];
     int mapWidth;
     int mapHeight;
     List<Point> points = new ArrayList<>();
-    boolean save = false;
+    boolean saveAtEnd = false;
     String savePath = "";
     int[] eraser = null;
     Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
-
 
      /**
      * Constructor.
@@ -47,12 +46,16 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         MAP.getHeight(this);
         wait(1000);
 
+        Menu menu = new Menu(this);
+
         // Set JFrame
         JFrame frame = new JFrame("Tiger Team Navigator");
         frame.add(this);
-        frame.setSize(MAP.getWidth(this), MAP.getHeight(this) + 30);
+        frame.setSize(MAP.getWidth(this), MAP.getHeight(this) +  + menu.getHeight() + TOP_PAD*2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.setLayout(null);
+        frame.setJMenuBar(menu);
 
         // Add listeners:
         this.addMouseListener(this);
@@ -60,7 +63,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (save) {
+                if (saveAtEnd) {
                     try {
                         MappingProvider.pointWriter.writeValues(new File(savePath)).writeAll(points);
                     } catch (IOException ex) {
@@ -89,7 +92,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      *             or null in case there's no need to save anything.
      */
     public void saveAtEnd(boolean save, String path) {
-        this.save = save;
+        this.saveAtEnd = save;
         this.savePath = path;
     }
 
@@ -111,24 +114,29 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      * @param points
      */
     public void reinitializeSpline(List<Point> points) {
-        for (int i = 0; i < spline.length; i++) {
-            switch (SPLINE_TYPE[i]) {
-                case "BSpline":
-                    spline[i] = new BSpline(points);
-                    break;
-                case "HermiteSpline":
-                    try {
-                        spline[i] = new HermiteSpline(points);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                default:
-                    System.out.println("Unresolved splineType! Available: BSpline, HermiteSpline");
-            }
+        switch (splineType) {
+            case "BSpline":
+                spline = new BSpline(points);
+                if (points.size() > 2) {
+                    vs = new Velocities(WHEEL_DISTANCE, 0.5);
+                    vs.update(new Path(spline));
+                }
+                break;
+            case "HermiteSpline":
+                try {
+                    spline = new HermiteSpline(points);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (points.size() > 5) {
+                    vs = new Velocities(WHEEL_DISTANCE, 0.5);
+                    vs.update(new Path(spline));
+                }
+                break;
+             default:
+                 System.out.println("Unresolved splineType! Available: BSpline, HermiteSpline");
         }
-        if (points.size() > 2)
-            vs.update(new Path(spline[0]));
+
     }
 
     /**
@@ -183,18 +191,16 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             g2d.fillOval((int) points.get(i).x - 10, (int) points.get(i).y - 10, 20, 20);
         }
 
-        if (spline[0] != null) {
-            for (int j = 0; j < spline.length; j++) {
-                Polygon p = new Polygon();
-                g2d.setColor(SPLINE_COLORS[j]);
-                for (double i = 0; i <= 1; i += 0.0001) {
-                    Point point = spline[j].interpolatePoint(i);
-                    p.addPoint((int) point.x, (int) point.y);
-                }
-                g2d.setColor(SPLINE_COLORS[j]);
-                g2d.setStroke(new BasicStroke(3));
-                g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
+        if (spline != null) {
+            Polygon p = new Polygon();
+            g2d.setColor(SPLINE_COLOR);
+            for (double i = 0; i <= 1; i += 0.0001) {
+                Point point = spline.interpolatePoint(i);
+                p.addPoint((int) point.x, (int) point.y);
             }
+            g2d.setColor(SPLINE_COLOR);
+            g2d.setStroke(new BasicStroke(3));
+            g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
         }
 
         if (points.size() > 1) {
@@ -239,11 +245,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     }
 
     /**
-     * @param splineIndex
      * @return The chosen spline.
      */
-    public Spline getSpline(int splineIndex) {
-        return spline[splineIndex];
+    public Spline getSpline() {
+        return spline;
     }
 
     /**
@@ -265,13 +270,12 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      * Returns a specific amount of equally spaced points from the spline.
      *
      * @param numberOfPoints
-     * @param splineIndex
      * @return
      */
-    private double[][] getSplinePoints(int numberOfPoints, int splineIndex) {
+    private double[][] getSplinePoints(int numberOfPoints) {
         double[][] splinePoints = new double[numberOfPoints][2];
         for (double i = 0; i < numberOfPoints; i++) {
-            Point point = spline[splineIndex].interpolatePoint(i / numberOfPoints);
+            Point point = spline.interpolatePoint(i / numberOfPoints);
             splinePoints[(int) i][0] = point.x;
             splinePoints[(int) i][1] = point.y;
         }
@@ -282,11 +286,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      * Get the spline's length. As higher the numberOfPoints is, the length will become more accurate.
      *
      * @param numberOfPoints
-     * @param splineIndex    Which spline to use.
      * @return
      */
-    public double getSplineLength(int numberOfPoints, int splineIndex) {
-        double[][] ps = getSplinePoints(numberOfPoints, splineIndex);
+    public double getSplineLength(int numberOfPoints) {
+        double[][] ps = getSplinePoints(numberOfPoints);
         double length = 0;
         for (int i = 0; i < ps.length - 1; i++) {
             length += Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
@@ -309,8 +312,8 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
                     JOptionPane.ERROR_MESSAGE);
 
         }
-        points = spline[0].getPoints();
-        vs.update(new Path(spline[0]));
+        points = spline.getPoints();
+        vs.update(new Path(spline));
         repaint();
     }
 
@@ -358,6 +361,11 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             }
             reinitializeSpline(points);
         }
+
+        if (points.size() > 4)
+            Menu.hermiteSpline.setEnabled(true);
+        else
+            Menu.hermiteSpline.setEnabled(false);
 
         repaint();
     }
@@ -407,5 +415,25 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
 
+    }
+
+    @Override
+    public void onItemClicked(ActionEvent e) {
+
+        if (e.getSource() == Menu.save) {
+
+        }
+
+        else if (e.getSource() == Menu.bSpline) {
+            splineType = "BSpline";
+            reinitializeSpline(points);
+        }
+
+        else if (e.getSource() == Menu.hermiteSpline) {
+            splineType = "HermiteSpline";
+            reinitializeSpline(points);
+        }
+
+        repaint();
     }
 }

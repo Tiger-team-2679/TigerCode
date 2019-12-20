@@ -59,7 +59,7 @@ public class HermiteSpline implements Spline{
 
     @Override
     public double getLength() {
-        return 0;
+        return 2;
     }
 
     @Override
