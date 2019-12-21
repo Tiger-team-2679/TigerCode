@@ -25,6 +25,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     final int TOP_PAD = 30;
 
     // Members:
+    JFrame frame;
     Image map = getImage(IMAGE_PATH);
     Spline spline;
     String splineType = "BSpline";
@@ -37,6 +38,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     int[] eraser = null;
     Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
     boolean enableSpline = true;
+    boolean showWheelsSplines = true;
     FilesNavigation fileNav;
     Menu menu;
 
@@ -53,9 +55,9 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         fileNav = new FilesNavigation(this);
 
         // Set JFrame
-        JFrame frame = new JFrame("Tiger Team Navigator");
+        frame = new JFrame("Tiger Team Navigator");
         frame.add(this);
-        frame.setSize(map.getWidth(this), map.getHeight(this) +  + menu.getHeight() + TOP_PAD*2);
+        frame.setSize(map.getWidth(this), map.getHeight(this) + menu.getHeight() + TOP_PAD*2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLayout(null);
@@ -208,7 +210,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
         }
 
-        if (enableSpline && !("HermiteSpline".equals(splineType)) && points.size() > 1) {
+        if (enableSpline && showWheelsSplines && !("HermiteSpline".equals(splineType)) && points.size() > 1) {
             Polygon right = new Polygon();
             Polygon left = new Polygon();
             for (Point p : vs.rPoints) {
@@ -435,8 +437,21 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
 
         if (e.getSource() == Menu.loadMap) {
             File file = fileNav.openFileChooserDialog();
-            if (file != null)
+            if (file != null) {
                 map = Toolkit.getDefaultToolkit().getImage(file.getPath());
+                JPanel panel = this;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        frame.setSize(map.getWidth(panel), map.getHeight(panel) + TOP_PAD*2);
+                    }
+                }.start();
+            }
         } else if (e.getSource() == Menu.save) {
             File file = fileNav.openFolderChooserDialog();
             if (file != null)
@@ -459,6 +474,9 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         } else if (e.getSource() == Menu.disableSpline) {
             enableSpline = !enableSpline;
             Menu.disableSpline.setText(enableSpline ? "Disable" : "Enable");
+        } else if (e.getSource() == Menu.showWheelsSplines) {
+            showWheelsSplines = !showWheelsSplines;
+            Menu.showWheelsSplines.setText(showWheelsSplines ? "Hide Wheels' Splines" : "Show Wheels' Splines");
         }
 
         repaint();
