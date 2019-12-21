@@ -114,12 +114,14 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
      * @param points
      */
     public void reinitializeSpline(List<Point> points) {
+        if (points.isEmpty()) return;
         switch (splineType) {
             case "BSpline":
                 spline = new BSpline(points);
-                if (points.size() > 2) {
+                if (points.size() > 2)
                     vs.update(new Path(spline));
-                }
+                else
+                    vs.deleteAllPoints();
                 break;
             case "HermiteSpline":
                 try {
@@ -127,9 +129,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (points.size() > 5) {
+                if (points.size() > 5)
                     vs.update(new Path(spline));
-                }
+                else
+                    vs.deleteAllPoints();
                 break;
              default:
                  System.out.println("Unresolved splineType! Available: BSpline, HermiteSpline");
@@ -233,7 +236,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     }
 
     private void erase() {
-        if (points.size() <= 2) return;
+        if (points.size() <= 2 || (splineType.equals("HermiteSpline") && points.size() <= 4)) {
+            Menu.hermiteSpline.setEnabled(false);
+            return;
+        }
         for (int i = points.size()-1; i>=0; i--) {
             if (getRect(eraser).intersects(new Rectangle((int)points.get(i).x, (int)points.get(i).y, 1, 1))) {
                 points.remove(i);
@@ -431,6 +437,13 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         else if (e.getSource() == Menu.hermiteSpline) {
             splineType = "HermiteSpline";
             reinitializeSpline(points);
+        }
+
+        else if (e.getSource() == Menu.deleteAll) {
+            splineType = "BSpline";
+            spline = null;
+            points = new LinkedList<>();
+            Menu.hermiteSpline.setEnabled(false);
         }
 
         repaint();

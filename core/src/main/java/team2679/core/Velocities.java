@@ -32,6 +32,14 @@ public class Velocities {
     }
 
     /**
+     * Deletes all right and left points.
+     */
+    public void deleteAllPoints() {
+        rPoints = new ArrayList<>();
+        lPoints = new ArrayList<>();
+    }
+
+    /**
      * Calculates the splines for each motor, for a given distance between the wheel and the center of the robot.
      * @param distance
      * @param numberOfPoints
