@@ -1,7 +1,9 @@
 package team2679.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Velocities {
 
@@ -159,11 +161,11 @@ public class Velocities {
      */
     public Graph[] getTimeGraphs() {
         double time = 0;
-        ArrayList<Point> rtPoints = new ArrayList<>();
-        ArrayList<Point> ltPoints = new ArrayList<>();
+        Map<Double, Double> rtPoints = new HashMap<>(velocities.length);
+        Map<Double, Double> ltPoints = new HashMap<>(velocities.length);
         for (int i = 0; i<velocities.length; i++) {
-            rtPoints.add(new Point(time, velocities[i][0]));
-            ltPoints.add(new Point(time, velocities[i][1]));
+            rtPoints.put(time, velocities[i][0]);
+            ltPoints.put(time, velocities[i][1]);
             time += Util.distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
         }
         return new Graph[] {new Graph(rtPoints), new Graph(ltPoints)};
@@ -175,11 +177,12 @@ public class Velocities {
      */
     public Graph[] getDisGraphs() {
         double dis = 0;
-        ArrayList<Point> rtPoints = new ArrayList<>();
-        ArrayList<Point> ltPoints = new ArrayList<>();
+        Map<Double, Double> rtPoints = new HashMap<>(velocities.length);
+        Map<Double, Double> ltPoints = new HashMap<>(velocities.length);
+
         for (int i = 0; i<velocities.length; i++) {
-            rtPoints.add(new Point(dis, velocities[i][0]));
-            ltPoints.add(new Point(dis, velocities[i][1]));
+            rtPoints.put(dis, velocities[i][0]);
+            ltPoints.put(dis, velocities[i][1]);
             dis += Util.distance(path.getPoints().get(i), path.getPoints().get(i+1));
         }
         return new Graph[] {new Graph(rtPoints), new Graph(ltPoints)};
@@ -187,9 +190,9 @@ public class Velocities {
 
     public Graph getTimeGraph() {
         double time = 0;
-        ArrayList<Point> points = new ArrayList<>();
+        Map<Double, Double> points = new HashMap<>(velocities.length);
         for (int i = 0; i<velocities.length; i++) {
-            points.add(new Point(time, (velocities[i][0] + velocities[i][1])/2));
+            points.put(time, (velocities[i][0] + velocities[i][1])/2);
             time += Util.distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
         }
         return new Graph(points);
@@ -197,9 +200,9 @@ public class Velocities {
 
     public Graph getDisGraph() {
         double dis = 0;
-        ArrayList<Point> points = new ArrayList<>();
+        Map<Double, Double> points = new HashMap<>(velocities.length);
         for (int i = 0; i<velocities.length; i++) {
-            points.add(new Point(dis, (velocities[i][0] + velocities[i][1])/2));
+            points.put(dis, (velocities[i][0] + velocities[i][1])/2);
             dis += Util.distance(path.getPoints().get(i), path.getPoints().get(i+1));
         }
         return new Graph(points);
