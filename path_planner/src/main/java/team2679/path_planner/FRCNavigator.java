@@ -22,10 +22,10 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     final String IMAGE_PATH = "fieldImage.png";
     final Color SPLINE_COLOR = Color.green;
     final double WHEEL_DISTANCE = 15;
-    final Image MAP = getImage(IMAGE_PATH);
     final int TOP_PAD = 30;
 
     // Members:
+    Image map = getImage(IMAGE_PATH);
     Spline spline;
     String splineType = "BSpline";
     LinkedList<WindowListener> listeners = new LinkedList<>();
@@ -38,23 +38,24 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
     boolean enableSpline = true;
     FilesNavigation fileNav;
+    Menu menu;
 
      /**
      * Constructor.
      */
     public FRCNavigator() {
 
-        MAP.getWidth(this);
-        MAP.getHeight(this);
+        map.getWidth(this);
+        map.getHeight(this);
         wait(1000);
 
-        Menu menu = new Menu(this);
+        menu = new Menu(this);
         fileNav = new FilesNavigation(this);
 
         // Set JFrame
         JFrame frame = new JFrame("Tiger Team Navigator");
         frame.add(this);
-        frame.setSize(MAP.getWidth(this), MAP.getHeight(this) +  + menu.getHeight() + TOP_PAD*2);
+        frame.setSize(map.getWidth(this), map.getHeight(this) +  + menu.getHeight() + TOP_PAD*2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLayout(null);
@@ -181,7 +182,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(MAP, 0, 0, this);
+        g2d.drawImage(map, 0, 0, this);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setStroke(new BasicStroke(4));
@@ -432,7 +433,11 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void onItemClicked(ActionEvent e) {
 
-        if (e.getSource() == Menu.save) {
+        if (e.getSource() == Menu.loadMap) {
+            File file = fileNav.openFileChooserDialog();
+            if (file != null)
+                map = Toolkit.getDefaultToolkit().getImage(file.getPath());
+        } else if (e.getSource() == Menu.save) {
             File file = fileNav.openFolderChooserDialog();
             if (file != null)
                 System.out.println(file.getPath());
