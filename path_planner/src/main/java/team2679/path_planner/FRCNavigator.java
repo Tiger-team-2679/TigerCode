@@ -36,6 +36,8 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
     String savePath = "";
     int[] eraser = null;
     Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
+    boolean enableSpline = true;
+    FilesNavigation fileNav;
 
      /**
      * Constructor.
@@ -47,6 +49,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
         wait(1000);
 
         Menu menu = new Menu(this);
+        fileNav = new FilesNavigation(this);
 
         // Set JFrame
         JFrame frame = new JFrame("Tiger Team Navigator");
@@ -192,7 +195,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             g2d.fillOval((int) points.get(i).x - 10, (int) points.get(i).y - 10, 20, 20);
         }
 
-        if (spline != null) {
+        if (spline != null && enableSpline) {
             Polygon p = new Polygon();
             g2d.setColor(SPLINE_COLOR);
             for (double i = 0; i <= 1; i += 0.0001) {
@@ -204,7 +207,7 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
             g2d.drawPolyline(p.xpoints, p.ypoints, p.npoints);
         }
 
-        if (!("HermiteSpline".equals(splineType)) && points.size() > 1) {
+        if (enableSpline && !("HermiteSpline".equals(splineType)) && points.size() > 1) {
             Polygon right = new Polygon();
             Polygon left = new Polygon();
             for (Point p : vs.rPoints) {
@@ -422,28 +425,35 @@ public class FRCNavigator extends JPanel implements MouseListener, MouseMotionLi
 
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void onItemClicked(ActionEvent e) {
 
         if (e.getSource() == Menu.save) {
-
-        }
-
-        else if (e.getSource() == Menu.bSpline) {
+            File file = fileNav.openFolderChooserDialog();
+            if (file != null)
+                System.out.println(file.getPath());
+        } else if (e.getSource() == Menu.load) {
+            File file = fileNav.openFileChooserDialog();
+            if (file != null)
+                System.out.println(file.getPath());
+        } else if (e.getSource() == Menu.bSpline) {
             splineType = "BSpline";
             reinitializeSpline(points);
-        }
-
-        else if (e.getSource() == Menu.hermiteSpline) {
+        } else if (e.getSource() == Menu.hermiteSpline) {
             splineType = "HermiteSpline";
             reinitializeSpline(points);
-        }
-
-        else if (e.getSource() == Menu.deleteAll) {
+        } else if (e.getSource() == Menu.deleteAll) {
             splineType = "BSpline";
             spline = null;
             points = new LinkedList<>();
             Menu.hermiteSpline.setEnabled(false);
+        } else if (e.getSource() == Menu.disableSpline) {
+            enableSpline = !enableSpline;
+            Menu.disableSpline.setText(enableSpline ? "Disable" : "Enable");
         }
 
         repaint();

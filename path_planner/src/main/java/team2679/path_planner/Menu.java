@@ -13,7 +13,7 @@ public class Menu extends JMenuBar implements ActionListener {
     JMenu file, edit, statistics, spline, changeSpline;
 
     // File Items:
-    public static JMenuItem save, bSpline, hermiteSpline, deleteAll;
+    public static JMenuItem save, load, bSpline, hermiteSpline, deleteAll, disableSpline;
 
     public Menu(MenuItems menuItems) {
 
@@ -23,8 +23,10 @@ public class Menu extends JMenuBar implements ActionListener {
         // Set Menus:
         // File menu:
         file = new JMenu("File");
-        save = new JMenuItem("Save");
+        save = new JMenuItem("Save Spline");
+        load = new JMenuItem("Load Spline");
         file.add(save);
+        file.add(load);
 
         // Edit menu:
         edit = new JMenu("Edit");
@@ -39,15 +41,19 @@ public class Menu extends JMenuBar implements ActionListener {
         changeSpline = new JMenu("Change Spline");
         bSpline = new JMenuItem("BSpline");
         hermiteSpline = new JMenuItem("Hermite Spline");
+        disableSpline = new JMenuItem("Disable");
         changeSpline.add(bSpline);
         changeSpline.add(hermiteSpline);
+        spline.add(disableSpline);
         spline.add(changeSpline);
 
         // Add listeners:
         save.addActionListener(this);
+        load.addActionListener(this);
         bSpline.addActionListener(this);
         hermiteSpline.addActionListener(this);
         deleteAll.addActionListener(this);
+        disableSpline.addActionListener(this);
 
         // Disabling some items:
         hermiteSpline.setEnabled(false);
