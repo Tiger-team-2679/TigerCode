@@ -34,6 +34,20 @@ public class Graph {
     }
 
     /**
+     * Get the derivative of the graph in a given point.
+     * @param x - The value of the graph.
+     * @return The slope of the graph at the given point.
+     */
+    public double derivative(double x) {
+        Map.Entry<Double, Double> floorPoint= dataPoints.floorEntry(x);
+        Map.Entry<Double, Double> ceilingPoint = dataPoints.ceilingEntry(x);
+
+        // Slope = ( y2 - y1 ) / ( x2 - x1 )
+        return (floorPoint.getValue() - ceilingPoint.getValue())
+                /  (floorPoint.getKey() - ceilingPoint.getKey());
+    }
+
+    /**
      * Get the x values range. Including the first point as well as the last point.
      * @return Double array in the form: [firstPointX, lastPointX]
      */
