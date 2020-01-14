@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
-
+	implementation 'org.knowm.xchart:xchart:3.6.0'
 	compile project(":core")
 }

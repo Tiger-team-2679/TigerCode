@@ -186,7 +186,7 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
 
     private void erase() {
         if (points.size() <= 2 || (splineType.equals("HermiteSpline") && points.size() <= 4)) {
-            Menu.hermiteSpline.setEnabled(false);
+            TigerTrack.hermiteSpline.setEnabled(false);
             return;
         }
         for (int i = points.size()-1; i>=0; i--) {
@@ -212,7 +212,7 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
      */
     private int inRange(MouseEvent e) {
         for (Point p : points) {
-            if (Util.distance(p, new Point(e.getX(), e.getY())) <= 10) {
+            if (team2679.core.Util.distance(p, new Point(e.getX(), e.getY())) <= 10) {
                 return points.indexOf(p);
             }
         }
@@ -245,7 +245,7 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
         double[][] ps = getSplinePoints(numberOfPoints);
         double length = 0;
         for (int i = 0; i < ps.length - 1; i++) {
-            length += Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
+            length += team2679.core.Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
         }
         return length;
     }
@@ -317,9 +317,9 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
         }
 
         if (points.size() >= 4)
-            Menu.hermiteSpline.setEnabled(true);
+            TigerTrack.hermiteSpline.setEnabled(true);
         else
-            Menu.hermiteSpline.setEnabled(false);
+            TigerTrack.hermiteSpline.setEnabled(false);
 
         repaint();
     }
