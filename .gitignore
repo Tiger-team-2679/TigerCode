@@ -1,0 +1,11 @@
+.idea/
+
+map.txt
+points.txt
+
+.gradle/
+
+*/build/--help
+build
+
+TigerCode.iml

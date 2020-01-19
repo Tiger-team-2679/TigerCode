@@ -8,9 +8,9 @@ public class Example1 {
          * Graphical mode example to create the spline and save the data locally.
          */
  
-        FRCNavigator nav = new FRCNavigator();
+        SplinePanel nav = new SplinePanel();
 //        nav.load("default");
-        nav.saveAtEnd(true, "./points.txt");
+//        nav.saveAtEnd(true, "./points.txt");
 
     }
 
