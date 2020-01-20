@@ -1,15 +1,10 @@
 package team2679.core;
 
-import org.apache.commons.math3.analysis.DifferentiableMultivariateFunction;
-import org.apache.commons.math3.analysis.DifferentiableUnivariateVectorFunction;
 import org.apache.commons.math3.analysis.UnivariateVectorFunction;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
 import org.apache.commons.math3.analysis.differentiation.FiniteDifferencesDifferentiator;
 import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.apache.commons.math3.analysis.differentiation.UnivariateVectorFunctionDifferentiator;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static java.lang.Math.pow;
 
@@ -26,14 +21,6 @@ public class ExtendedSplineAdapter implements ExtendedSpline {
 
     public Point interpolatePoint(double percent) {
         return spline.interpolatePoint(percent);
-    }
-
-    public double getLength() {
-        return spline.getLength();
-    }
-
-    public List<Point> getPoints() {
-        return spline.getPoints();
     }
 
     public double getCurvature(double percent) {

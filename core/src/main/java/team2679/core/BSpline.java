@@ -133,15 +133,6 @@ import java.util.List;
          return splineY;
      }
 
-     public double getLength() {
-         return length;
-     }
-
-     @Override
-     public List<Point> getPoints() {
-         return points;
-     }
-
      /**
       * Get a point on the spline
       * @param percent

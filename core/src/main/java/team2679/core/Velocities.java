@@ -18,7 +18,7 @@ public class Velocities {
         this.path = path;
         this.wheelDistance = wheelDistance;
         this.lengthOp = lengthOp;
-        wheelsSplines(wheelDistance, (int)(path.getSpline().getLength() * lengthOp));
+        wheelsSplines(wheelDistance, (int)(Util.spineLength(path.getSpline(), 0.001) * lengthOp));
     }
 
     public Velocities(double wheelDistance, double lengthOp) {
@@ -30,7 +30,7 @@ public class Velocities {
 
     public void update(Path path){
         this.path = path;
-        wheelsSplines(wheelDistance, (int)(path.getSpline().getLength() * lengthOp));
+        wheelsSplines(wheelDistance, (int)(Util.spineLength(path.getSpline(), 0.001)  * lengthOp));
     }
 
     /**
@@ -48,7 +48,6 @@ public class Velocities {
      */
     private  void wheelsSplines(double distance, int numberOfPoints){
         List<Point> splinePoints = path.getPoints(numberOfPoints);
-        path.setPoints(splinePoints);
         velocities = new double[splinePoints.size() - 1][2];
         rPoints = new ArrayList<>();
         lPoints = new ArrayList<>();
@@ -199,7 +198,7 @@ public class Velocities {
     public Graph getTimeGraph() {
         double time = 0;
         Map<Double, Double> points = new HashMap<>(velocities.length);
-        for (int i = 0; i<velocities.length; i++) {
+        for (int i = 0; i<velocities.length - 1; i++) {
             points.put(time, (velocities[i][0] + velocities[i][1])/2);
             time += Util.distance(rPoints.get(i), rPoints.get(i+1)) / velocities[i][0];
         }

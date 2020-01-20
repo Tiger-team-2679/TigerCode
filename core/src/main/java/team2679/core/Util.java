@@ -41,4 +41,18 @@ final public class Util {
         return (xDerivative * ySecondDerivative - yDerivative * xSecondDerivative)
                 / pow(xDerivative * xDerivative + yDerivative * yDerivative, 1.5);
     }
+
+    public static double spineLength(Spline spline,double step) {
+        double length = 0;
+        Point lastPoint = spline.interpolatePoint(0);
+        Point currentPoint;
+
+        for (double percent = step; percent < 1; percent += step) {
+            currentPoint = spline.interpolatePoint(percent);
+            length += distance(lastPoint, currentPoint);
+            lastPoint = currentPoint;
+        }
+
+        return length;
+    }
 }

@@ -74,13 +74,4 @@ public class PolynomialSpline implements ExtendedSpline {
         return new ImmutablePair<Segment, Double>(curveSegment, t);
     }
 
-    @Override
-    public double getLength() {
-        return 0;
-    }
-
-    @Override
-    public List<Point> getPoints() {
-        return null;
-    }
 }

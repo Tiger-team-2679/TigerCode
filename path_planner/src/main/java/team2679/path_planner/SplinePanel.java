@@ -265,7 +265,6 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
                     JOptionPane.ERROR_MESSAGE);
 
         }
-        points = spline.getPoints();
         vs.update(new Path(spline));
         repaint();
     }

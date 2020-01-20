@@ -6,21 +6,10 @@ import java.util.List;
 public class Path {
 
     private Spline spline;
-    private List<Point> controlPoints;
     private List<Point> points;
 
     public Path(Spline spline) {
         this.spline = spline;
-        controlPoints = spline.getPoints();
-    }
-
-    /**
-     * Update the spline.
-     * @param spline
-     */
-    public void setPath(Spline spline) {
-        this.spline = spline;
-        controlPoints = spline.getPoints();
     }
 
     /**
@@ -29,12 +18,12 @@ public class Path {
      * @return
      */
     public List<Point> getPoints(int numberOfPoints) {
-        ArrayList<Point> splinePoints = new ArrayList<>();
+        points = new ArrayList<>();
         for (double i = 0; i < numberOfPoints; i++) {
             double percent = i / numberOfPoints;
-            splinePoints.add(spline.interpolatePoint(percent));
+            points.add(spline.interpolatePoint(percent));
         }
-        return splinePoints;
+        return points;
     }
 
     public void setPoints(List<Point> points) {
@@ -42,11 +31,10 @@ public class Path {
     }
 
     public List<Point> getPoints() {
+        if (points.isEmpty()){
+            return getPoints(1000);
+        }
         return points;
-    }
-
-    public List<Point> getControlPoints() {
-        return controlPoints;
     }
 
     public Spline getSpline() {

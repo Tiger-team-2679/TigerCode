@@ -6,8 +6,4 @@ public interface Spline {
 
     public Point interpolatePoint(double percent);
 
-    public double getLength();
-
-    List<Point> getPoints();
-
 }
