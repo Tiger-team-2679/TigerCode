@@ -1,5 +1,7 @@
 package team2679.path_planner;
 
+import team2679.core.JerkAccelerationLimitedApexProfileEncoderNumerousObtaining;
+
 public class Example1 {
 
     public static void main(String[] args) {
@@ -7,10 +9,8 @@ public class Example1 {
         /**
          * Graphical mode example to create the spline and save the data locally.
          */
- 
-        SplinePanel nav = new SplinePanel();
-//        nav.load("default");
-//        nav.saveAtEnd(true, "./points.txt");
+        JerkAccelerationLimitedApexProfileEncoderNumerousObtaining jerkAccelerationLimitedApexProfileEncoderNumerousObtaining
+                = new JerkAccelerationLimitedApexProfileEncoderNumerousObtaining(1, 1, 1);
 
     }
 

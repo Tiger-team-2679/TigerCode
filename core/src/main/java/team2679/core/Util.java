@@ -4,6 +4,8 @@ import javafx.scene.PointLight;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 
+import java.util.LinkedList;
+
 import static java.lang.Math.pow;
 
 final public class Util {

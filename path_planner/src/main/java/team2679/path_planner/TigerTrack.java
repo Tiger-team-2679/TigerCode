@@ -21,7 +21,7 @@ public class TigerTrack extends JFrame implements ActionListener {
 
     // File Items:
     public static JMenuItem loadMap, save, load, bSpline, hermiteSpline, deleteAll, disableSpline, showWheelsSplines
-            , timeVelocityGraph, distanceVelocityGraph;
+            , timeVelocityGraph, distanceVelocityGraph, finalVelocityTimeGraph;
 
 
     public TigerTrack() {
@@ -52,8 +52,10 @@ public class TigerTrack extends JFrame implements ActionListener {
         statistics = new JMenu("Statistics");
         timeVelocityGraph = new JMenuItem("Robot Velocity Time Graph");
         distanceVelocityGraph = new JMenuItem("Robot Velocity Distance Graph");
+        finalVelocityTimeGraph = new JMenuItem("Robot Velocity Time Graph (After jerk and acceleration configuration)");
         statistics.add(timeVelocityGraph);
         statistics.add(distanceVelocityGraph);
+        statistics.add(finalVelocityTimeGraph);
 
         // Spline menu:
         spline = new JMenu("Spline");
@@ -77,6 +79,7 @@ public class TigerTrack extends JFrame implements ActionListener {
         showWheelsSplines.addActionListener(this);
         timeVelocityGraph.addActionListener(this);
         distanceVelocityGraph.addActionListener(this);
+        finalVelocityTimeGraph.addActionListener(this);
 
         // Disabling some items:
         hermiteSpline.setEnabled(false);
@@ -168,8 +171,16 @@ public class TigerTrack extends JFrame implements ActionListener {
             Util.displayGraph(sp.vs.getTimeGraph(), "Velocity Time Graph (Max V: 100)", "Time", "Velocity", "V(t)", 0.001);
         }
         else if (e.getSource() == distanceVelocityGraph) {
+            DifferentialDriveSC dd = new DifferentialDriveSC(15, 100);
+            IntervalGraph<Double> g = dd.getSpeedCap(new SplineWrapper(new ExtendedSplineAdapter(sp.spline), 0.001));
+            Util.displayGraph(g, "Velocity Distance Graph (Max V: 100)", "Distance", "Velocity", "V(x)");
+        } else if (e.getSource() == finalVelocityTimeGraph) {
             sp.vs.setMaxVelocities(100);
-            Util.displayGraph(sp.vs.getDisGraph(), "Distance Time Graph (Max V: 100)", "Distance", "Velocity", "V(x)", 0.1);
+            DifferentialDriveSC dd = new DifferentialDriveSC(15, 100);
+            IntervalGraph g = dd.getSpeedCap(new SplineWrapper(new ExtendedSplineAdapter(sp.spline), 0.001));
+            MotionProfileGenerator mpg = new MotionProfileGenerator(100);
+            Util.displayGraph(mpg.generate(g, 0, 0),
+                    "Velocity Distance Graph (After motion profiling)", "Distance", "Velocity", "V(x)");
         }
         sp.repaint();
     }

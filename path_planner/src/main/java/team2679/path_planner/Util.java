@@ -5,6 +5,7 @@ import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import team2679.core.Graph;
+import team2679.core.IntervalGraph;
 
 import javax.swing.*;
 
@@ -20,6 +21,24 @@ public class Util {
             xChart[i] = x;
             yChart[i] = graph.value(x);
             x += step;
+        }
+        XYChart chart = QuickChart.getChart(title, xTitle, yTitle, seriesName, xChart, yChart);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new SwingWrapper(chart).displayChart().setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            }
+        }).start();
+    }
+
+    public static void displayGraph(IntervalGraph<Double> graph, String title, String xTitle, String yTitle, String seriesName) {
+        double[] xChart = new double[graph.list.size()];
+        double[] yChart = new double[xChart.length];
+        double distance = 0;
+        for (int i = 0; i < xChart.length; i++) {
+            xChart[i] = distance;
+            yChart[i] = graph.list.get(i);
+            distance += graph.step;
         }
         XYChart chart = QuickChart.getChart(title, xTitle, yTitle, seriesName, xChart, yChart);
         new Thread(new Runnable() {

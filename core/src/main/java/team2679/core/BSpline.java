@@ -16,7 +16,7 @@ import java.util.List;
   *
   * @author krueger
   */
- public class BSpline implements Spline{
+ public class BSpline implements ExtendedSpline{
 
      /**
       *  Array representing the relative proportion of the total distance
@@ -141,5 +141,10 @@ import java.util.List;
      @Override
      public Point interpolatePoint(double percent) {
         return new Point(splineX.getValue(percent), splineY.getValue(percent));
+     }
+
+     @Override
+     public double getCurvature(double percent) {
+         return 0;
      }
  }

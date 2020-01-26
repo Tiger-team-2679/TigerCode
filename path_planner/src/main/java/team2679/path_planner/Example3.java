@@ -18,7 +18,7 @@ public class Example3 {
             points.add(new Point(Math.random()*i, i));
         }
 
-        Spline spline = new BSpline(points);
+        ExtendedSpline spline = new BSpline(points);
 
         Velocities vs = new Velocities(new Path(spline), 15, 0.5);
 

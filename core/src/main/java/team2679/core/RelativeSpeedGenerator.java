@@ -1,5 +1,8 @@
 package team2679.core;
 
+import org.apache.commons.math3.geometry.euclidean.oned.Interval;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,16 +28,17 @@ public class RelativeSpeedGenerator {
      * I Left wheel speed relative to the robot's average speed against distance.
      * II Right wheel speed relative to the robot's average speed against distance.
      */
-    public WheelGraph getRelativeSpeed(ExtendedSpline spline) {
-        Map left = new HashMap();
-        Map right = new HashMap();
-        for (double percent = 0; percent <= 1; percent += 1.0 / dataPoints) {
-            right.put(percent, (1 / spline.getCurvature(percent) + width / 2) / (1 / spline.getCurvature(percent)));
+    public WheelGraph getRelativeSpeed(SplineWrapper spline) {
+        ArrayList<Double> left = new ArrayList();
+        ArrayList<Double> right = new ArrayList();
+        IntervalGraph<WayPoint> points = spline.getIntervalGraph();
+        for (int i = 0; i < points.list.size(); i++) {
+            right.add((1 / points.list.get(i).curvature + width / 2) / (1 / points.list.get(i).curvature));
         }
-        for (double percent = 0; percent <= 1; percent += 1.0 / dataPoints) {
-            left.put(percent, (1 / spline.getCurvature(percent) - width / 2) / (1 / spline.getCurvature(percent)));
+        for (int i = 0; i < points.list.size(); i++) {
+            left.add((1 / points.list.get(i).curvature - width / 2) / (1 / points.list.get(i).curvature));
         }
-            return new WheelGraph(new Graph(left), new Graph(right));
+        return new WheelGraph(new IntervalGraph(left, points.step), new IntervalGraph(right, points.step));
     }
 
 }

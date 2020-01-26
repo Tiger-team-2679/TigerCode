@@ -1,5 +1,6 @@
 package team2679.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,15 +10,12 @@ import java.util.Map;
 public class MotionProfileGenerator {
 
     private double acceleration;
-    private double step;
 
     /**
      * @param acceleration The fastest the robot can accelerate and decelerate.
-     * @param step The amount of space traveled between samples to make the graph. (The lower the number, the more accurate it will be)
      */
-    public MotionProfileGenerator(double acceleration, double step) {
+    public MotionProfileGenerator(double acceleration) {
         this.acceleration = acceleration;
-        this.step = step;
     }
 
     /**
@@ -26,23 +24,34 @@ public class MotionProfileGenerator {
      * @param endVelocity The speed of the robot at the end of the path.
      * @return A graph that was changed based on the original to have realistic acceleration and deceleration.
      */
-    public Graph generate(Graph speedCap, double startVelocity, double endVelocity) {
-        Map points = new HashMap();
+    public IntervalGraph generate(IntervalGraph<Double> speedCap, double startVelocity, double endVelocity) {
+        ArrayList<Double> points = new ArrayList<>();
         double lastVelocity = startVelocity;
-        for (double distance = 0; distance < speedCap.getRange().getMaximum(); distance += step) {
-            double currentVelocity = Math.sqrt(lastVelocity * lastVelocity + 2 * acceleration * distance);
-            currentVelocity = Math.min(currentVelocity, speedCap.value(distance));
-            points.put(distance, currentVelocity);
+        for (double a : speedCap) {
+            double currentVelocity = Math.sqrt(lastVelocity * lastVelocity + 2 * acceleration * speedCap.step);
+            currentVelocity = Math.min(currentVelocity, a);
+            points.add(currentVelocity);
             lastVelocity = currentVelocity;
         }
-        Graph accelerate = new Graph(points);
-        points = new HashMap();
+
+        IntervalGraph<Double> accelerate = new IntervalGraph(points, speedCap.step);
+        points = new ArrayList<>();
         lastVelocity = endVelocity;
-        for (double distance = accelerate.getRange().getMaximum(); distance > 0; distance -= step) {
-            double currentVelocity = Math.sqrt(lastVelocity * lastVelocity + 2 * acceleration * distance);
-            currentVelocity = Math.min(currentVelocity, accelerate.value(distance));
-            points.put(distance, currentVelocity);
+        for (int i = speedCap.list.size() - 1; i >= 0; i--) {
+            double currentVelocity = Math.sqrt(lastVelocity * lastVelocity + 2 * acceleration * speedCap.step);
+            currentVelocity = Math.min(currentVelocity, accelerate.list.get(i));
+            points.add(currentVelocity);
             lastVelocity = currentVelocity;
+        }
+        return new IntervalGraph(points, speedCap.step);
+    }
+
+    public static Graph convertToTimeGraph(IntervalGraph<Double> distanceGraph) {
+        HashMap<Double, Double> points = new HashMap<>();
+        double time = 0;
+        for (double v : distanceGraph) {
+            points.put(time, v);
+            time += distanceGraph.step / v;
         }
         return new Graph(points);
     }

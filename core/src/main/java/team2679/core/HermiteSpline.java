@@ -1,7 +1,7 @@
 package team2679.core;
 import java.util.List;
 
-public class HermiteSpline implements Spline{
+public class HermiteSpline implements ExtendedSpline{
 
     private List<Point> controlPoints;
 
@@ -78,5 +78,10 @@ public class HermiteSpline implements Spline{
             t = 1;
         }
         return new double[]{t,jump};
+    }
+
+    @Override
+    public double getCurvature(double percent) {
+        return 0;
     }
 }

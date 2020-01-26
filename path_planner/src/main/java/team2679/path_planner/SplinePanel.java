@@ -2,7 +2,6 @@ package team2679.path_planner;
 
 import team2679.core.*;
 import team2679.core.Point;
-import team2679.core.WindowListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import team2679.core.MappingProvider;
@@ -26,13 +24,14 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
 
     // Members:
     Image map = getImage(IMAGE_PATH);
-    Spline spline;
+    ExtendedSpline spline;
     String splineType = "BSpline";
     List<Point> points = new ArrayList<>();
     int[] eraser = null;
     Velocities vs = new Velocities(WHEEL_DISTANCE, 0.5);
     boolean enableSpline = true;
     boolean showWheelsSplines = true;
+    JerkAccelerationLimitedApexProfileEncoderNumerousObtaining jerk;
 
 
      /**
@@ -43,6 +42,8 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
         map.getWidth(this);
         map.getHeight(this);
         wait(1000);
+
+        jerk = new JerkAccelerationLimitedApexProfileEncoderNumerousObtaining(0.5, 0.5, 0.001);
 
         // Add listeners:
         this.addMouseListener(this);

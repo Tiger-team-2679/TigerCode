@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-public class SplineGraphAdapter implements Iterable<double[]> {
+public class SplineWrapper implements Iterable {
 
-    private Spline spline;
-    private ArrayList<double[]> points;
+    private ExtendedSpline spline;
+    private IntervalGraph<WayPoint> graph;
 
-    public SplineGraphAdapter(Spline spline, double step) {
+    public SplineWrapper(ExtendedSpline spline, double step) {
         this.spline = spline;
-        this.points = new ArrayList<>();
+        ArrayList<WayPoint> points = new ArrayList<>();
 
         Path path = new Path(spline);
 
@@ -32,24 +32,19 @@ public class SplineGraphAdapter implements Iterable<double[]> {
         Graph yd = new Graph(ys);
         Graph cd = new Graph(curvatures);
 
-
         for (double i = xd.getRange().getMinimum(); i < xd.getRange().getMaximum(); i += step) {
-            points.add(new double[] {xd.value(i), yd.value(i), cd.value(i)});
+            points.add(new WayPoint(xd.value(i), yd.value(i), cd.value(i)));
         }
+
+        this.graph = new IntervalGraph<>(points, step);
+    }
+
+    public IntervalGraph getIntervalGraph() {
+        return graph;
     }
 
     @Override
-    public Iterator<double[]> iterator() {
-        return null;
-    }
-
-    @Override
-    public void forEach(Consumer<? super double[]> action) {
-        
-    }
-
-    @Override
-    public Spliterator<double[]> spliterator() {
-        return null;
+    public Iterator<WayPoint> iterator() {
+        return this.graph.iterator();
     }
 }

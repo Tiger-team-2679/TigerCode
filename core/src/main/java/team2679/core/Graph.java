@@ -19,7 +19,7 @@ public class Graph {
      */
     public double value(double x) {
         Map.Entry<Double, Double> floorPoint= dataPoints.floorEntry(x);
-        Map.Entry<Double, Double> ceilingPoint = dataPoints.ceilingEntry(x);
+        Map.Entry<Double, Double> ceilingPoint = dataPoints.higherEntry(x);
         // Interpolation:
 
         // Slope = ( y2 - y1 ) / ( x2 - x1 )
@@ -40,11 +40,11 @@ public class Graph {
      */
     public double derivative(double x) {
         Map.Entry<Double, Double> floorPoint= dataPoints.floorEntry(x);
-        Map.Entry<Double, Double> ceilingPoint = dataPoints.ceilingEntry(x);
+        Map.Entry<Double, Double> higherPoint = dataPoints.higherEntry(x);
 
         // Slope = ( y2 - y1 ) / ( x2 - x1 )
-        return (floorPoint.getValue() - ceilingPoint.getValue())
-                /  (floorPoint.getKey() - ceilingPoint.getKey());
+        return (floorPoint.getValue() - higherPoint.getValue())
+                /  (floorPoint.getKey() - higherPoint.getKey());
     }
 
     /**

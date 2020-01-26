@@ -1,5 +1,8 @@
 package team2679.core;
 
+import org.apache.commons.math3.geometry.euclidean.oned.Interval;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,37 +13,29 @@ public class DifferentialDriveSC {
 
     double width;
     double maxVelocity;
-    int dataPoints;
 
     /**
      * @param width The space between the wheels of the robot.
      * @param maxVelocity The fastest the robot can travel.
-     * @param dataPoints The amount of samples the graph will have on the x-axis.
      */
-    public DifferentialDriveSC(double width, double maxVelocity, int dataPoints) {
+    public DifferentialDriveSC(double width, double maxVelocity) {
         this.width = width;
         this.maxVelocity = maxVelocity;
-        this.dataPoints = dataPoints;
     }
 
     /**
      * @param spline A spline of the robot's path.
      * @return A graph of the average speed between the wheels for the robot against distance considering the robot's max speed.
      */
-    public Graph getSpeedCap(ExtendedSpline spline) {
-        Map points = new HashMap();
-        double length = 0;
-        Point currentPoint = spline.interpolatePoint(0);
-        Point lastPoint;
-        for (double percent = 0; percent <= 1; percent += 1.0 / dataPoints) {
-            lastPoint = currentPoint;
-            currentPoint = spline.interpolatePoint(percent);
-            length += Util.distance(lastPoint, currentPoint);
-            double radius = 1 / spline.getCurvature(percent);
+    public IntervalGraph getSpeedCap(SplineWrapper spline) {
+        IntervalGraph<WayPoint> points = spline.getIntervalGraph();
+        ArrayList<Double> velocityPoints = new ArrayList<>();
+        for (int i = 0; i < points.list.size(); i++) {
+            double radius = Math.abs(1 / points.list.get(i).curvature);
             double averageSpeed = ((maxVelocity * (radius - (width / 2)) / (radius + (width / 2))) + maxVelocity) / 2;
-            points.put(length, averageSpeed);
+            velocityPoints.add(averageSpeed);
         }
-        return new Graph(points);
+        return new IntervalGraph(velocityPoints, points.step);
     }
 
 }
