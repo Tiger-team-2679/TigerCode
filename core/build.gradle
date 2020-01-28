@@ -3,6 +3,17 @@ plugins {
 	id 'maven-publish'
 }
 
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'team2679'
+			artifactId = 'core'
+
+			from components.java
+		}
+	}
+}
+
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
 	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
