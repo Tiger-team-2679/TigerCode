@@ -1,7 +1,8 @@
-package team2679.core;
+package team2679.core.spline;
 
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import team2679.core.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package team2679.core;
+package team2679.core.spline;
 
 public class WayPoint {
 

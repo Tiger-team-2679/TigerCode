@@ -1,7 +1,7 @@
 package team2679.path_planner;
 
 import team2679.core.*;
-import team2679.core.Point;
+import team2679.core.spline.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import team2679.core.MappingProvider;
+import team2679.core.spline.Point;
+import team2679.core.util.MappingProvider;
+import team2679.core.graph.JerkAccelerationLimitedApexProfileEncoderNumerousObtaining;
+import team2679.core.util.Util;
 
 
 public class SplinePanel extends JPanel implements MouseListener, MouseMotionListener {
@@ -213,7 +216,7 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
      */
     private int inRange(MouseEvent e) {
         for (Point p : points) {
-            if (team2679.core.Util.distance(p, new Point(e.getX(), e.getY())) <= 10) {
+            if (Util.distance(p, new Point(e.getX(), e.getY())) <= 10) {
                 return points.indexOf(p);
             }
         }
@@ -246,7 +249,7 @@ public class SplinePanel extends JPanel implements MouseListener, MouseMotionLis
         double[][] ps = getSplinePoints(numberOfPoints);
         double length = 0;
         for (int i = 0; i < ps.length - 1; i++) {
-            length += team2679.core.Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
+            length += Util.distance(new Point(ps[i][0], ps[i][1]), new Point(ps[i + 1][0], ps[i + 1][1]));
         }
         return length;
     }

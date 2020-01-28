@@ -1,4 +1,6 @@
-package team2679.core;
+package team2679.core.controller;
+
+import team2679.core.graph.Graph;
 
 public class Follower {
 

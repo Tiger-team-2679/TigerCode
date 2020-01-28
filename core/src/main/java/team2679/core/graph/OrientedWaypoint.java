@@ -1,4 +1,6 @@
-package team2679.core;
+package team2679.core.graph;
+
+import team2679.core.spline.Point;
 
 public class OrientedWaypoint {
     public Point point;

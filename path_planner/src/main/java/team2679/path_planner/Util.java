@@ -4,8 +4,8 @@ import org.apache.commons.lang3.Range;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
-import team2679.core.Graph;
-import team2679.core.IntervalGraph;
+import team2679.core.graph.Graph;
+import team2679.core.graph.IntervalGraph;
 
 import javax.swing.*;
 

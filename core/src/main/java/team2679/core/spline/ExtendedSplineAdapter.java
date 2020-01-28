@@ -1,4 +1,4 @@
-package team2679.core;
+package team2679.core.spline;
 
 import org.apache.commons.math3.analysis.UnivariateVectorFunction;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;

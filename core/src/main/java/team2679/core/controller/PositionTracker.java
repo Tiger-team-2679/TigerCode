@@ -1,4 +1,6 @@
-package team2679.core;
+package team2679.core.controller;
+
+import team2679.core.controller.Pos;
 
 /**
  * Tracks position relative to a set starting position using angle and displacement.

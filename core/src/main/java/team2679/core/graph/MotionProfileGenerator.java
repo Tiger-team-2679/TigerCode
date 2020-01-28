@@ -1,8 +1,10 @@
-package team2679.core;
+package team2679.core.graph;
+
+import team2679.core.graph.Graph;
+import team2679.core.graph.IntervalGraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Takes a graph that was speed capped, and limits it based on max acceleration and deceleration.

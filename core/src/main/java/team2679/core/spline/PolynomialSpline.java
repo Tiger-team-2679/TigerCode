@@ -1,8 +1,9 @@
-package team2679.core;
+package team2679.core.spline;
 
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import team2679.core.util.Util;
 
 import java.util.List;
 import java.util.Map;

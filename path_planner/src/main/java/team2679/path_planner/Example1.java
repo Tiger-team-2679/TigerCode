@@ -1,6 +1,6 @@
 package team2679.path_planner;
 
-import team2679.core.JerkAccelerationLimitedApexProfileEncoderNumerousObtaining;
+import team2679.core.graph.JerkAccelerationLimitedApexProfileEncoderNumerousObtaining;
 
 public class Example1 {
 

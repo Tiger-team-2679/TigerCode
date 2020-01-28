@@ -1,4 +1,7 @@
-package team2679.core;
+package team2679.core.graph;
+
+import team2679.core.graph.IntervalGraph;
+import team2679.core.graph.WheelGraph;
 
 import java.util.ArrayList;
 

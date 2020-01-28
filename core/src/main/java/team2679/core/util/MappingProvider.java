@@ -1,9 +1,10 @@
-package team2679.core;
+package team2679.core.util;
 
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import team2679.core.spline.Point;
 
 public class MappingProvider {
     private static final CsvMapper MAPPER = new CsvMapper();

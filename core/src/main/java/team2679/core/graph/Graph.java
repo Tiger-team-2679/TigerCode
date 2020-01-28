@@ -1,4 +1,4 @@
-package team2679.core;
+package team2679.core.graph;
 
 import org.apache.commons.lang3.Range;
 

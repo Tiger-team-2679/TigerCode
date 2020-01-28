@@ -1,10 +1,9 @@
-package team2679.core;
+package team2679.core.graph;
 
-import org.apache.commons.math3.geometry.euclidean.oned.Interval;
+import team2679.core.spline.SplineWrapper;
+import team2679.core.spline.WayPoint;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Creates a graph of the average speed between the wheels for the robot against distance considering the robot's max speed.

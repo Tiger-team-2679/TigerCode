@@ -1,7 +1,10 @@
 package team2679.path_planner;
 
-import team2679.core.*;
 import team2679.core.Velocities;
+import team2679.core.spline.BSpline;
+import team2679.core.spline.ExtendedSpline;
+import team2679.core.spline.Path;
+import team2679.core.spline.Point;
 
 import java.util.ArrayList;
 

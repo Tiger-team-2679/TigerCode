@@ -1,5 +1,10 @@
 package team2679.core;
 
+import team2679.core.graph.Graph;
+import team2679.core.spline.Path;
+import team2679.core.spline.Point;
+import team2679.core.util.Util;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

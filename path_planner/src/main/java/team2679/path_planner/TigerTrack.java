@@ -1,7 +1,12 @@
 package team2679.path_planner;
 
-import team2679.core.*;
-import team2679.core.Point;
+import team2679.core.spline.Point;
+import team2679.core.graph.DifferentialDriveSC;
+import team2679.core.graph.IntervalGraph;
+import team2679.core.graph.MotionProfileGenerator;
+import team2679.core.spline.ExtendedSplineAdapter;
+import team2679.core.spline.SplineWrapper;
+import team2679.core.util.MappingProvider;
 
 import javax.swing.*;
 import java.awt.*;

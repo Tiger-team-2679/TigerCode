@@ -1,4 +1,4 @@
-package team2679.core;
+package team2679.core.graph;
 
 import java.util.ArrayList;
 import java.util.Iterator;

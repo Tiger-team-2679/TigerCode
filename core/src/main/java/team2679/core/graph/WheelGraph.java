@@ -1,4 +1,7 @@
-package team2679.core;
+package team2679.core.graph;
+
+import team2679.core.graph.GraphList;
+import team2679.core.graph.IntervalGraph;
 
 /**
  * Houses two graphs for both the left and right wheels of the robot.

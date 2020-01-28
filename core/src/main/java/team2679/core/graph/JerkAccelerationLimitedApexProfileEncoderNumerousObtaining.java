@@ -1,11 +1,4 @@
-package team2679.core;
-
-import javafx.scene.control.SplitPane;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+package team2679.core.graph;
 
 /**
  * Notice that, the acronym of this class name is: J.A.L.A.P.E.N.O,

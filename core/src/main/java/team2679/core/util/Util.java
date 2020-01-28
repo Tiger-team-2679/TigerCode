@@ -1,10 +1,9 @@
-package team2679.core;
+package team2679.core.util;
 
-import javafx.scene.PointLight;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-
-import java.util.LinkedList;
+import team2679.core.spline.Spline;
+import team2679.core.spline.Point;
 
 import static java.lang.Math.pow;
 
@@ -44,7 +43,7 @@ final public class Util {
                 / pow(xDerivative * xDerivative + yDerivative * yDerivative, 1.5);
     }
 
-    public static double spineLength(Spline spline,double step) {
+    public static double spineLength(Spline spline, double step) {
         double length = 0;
         Point lastPoint = spline.interpolatePoint(0);
         Point currentPoint;

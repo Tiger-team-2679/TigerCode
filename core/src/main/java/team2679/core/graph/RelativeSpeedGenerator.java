@@ -1,10 +1,9 @@
-package team2679.core;
+package team2679.core.graph;
 
-import org.apache.commons.math3.geometry.euclidean.oned.Interval;
+import team2679.core.spline.WayPoint;
+import team2679.core.spline.SplineWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Creates two graphs of the two wheels relative to the robot's average speed against distance.

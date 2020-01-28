@@ -1,10 +1,12 @@
-package team2679.core;
+package team2679.core.spline;
+
+import team2679.core.graph.Graph;
+import team2679.core.graph.IntervalGraph;
+import team2679.core.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class SplineWrapper implements Iterable {
 
