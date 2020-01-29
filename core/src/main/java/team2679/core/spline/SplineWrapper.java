@@ -41,7 +41,7 @@ public class SplineWrapper implements Iterable {
         this.graph = new IntervalGraph<>(points, step);
     }
 
-    public IntervalGraph getIntervalGraph() {
+    public IntervalGraph<WayPoint> getIntervalGraph() {
         return graph;
     }
 
