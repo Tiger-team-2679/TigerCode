@@ -16,7 +16,7 @@ allprojects {
     }
 }
 
-
+group = "team2679"
 wrapper {
     gradleVersion = '5.4.1'
 }
