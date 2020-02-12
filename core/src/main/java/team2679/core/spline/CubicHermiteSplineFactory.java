@@ -47,6 +47,16 @@ public class CubicHermiteSplineFactory {
         }
         return new PolynomialSpline(segments);
     }
+
+    public static PolynomialSpline cubicHermiteSplineOriented(List<OrientedWaypoint> waypoints) {
+        ArrayList<Waypoint> finalWaypoints = new ArrayList<>(waypoints.size());
+
+        for (OrientedWaypoint waypoint : waypoints) {
+            finalWaypoints.add(new Waypoint(waypoint.point, new Vector2D(Math.sin(waypoint.angle), Math.cos(waypoint.angle))));
+        }
+        return cubicHermiteSpline(finalWaypoints);
+    }
+
     private static PolynomialFunction GenerateSegment(double p0, double m0, double p1, double m1){
         return Util.multiply(h00, p0).add(
                 Util.multiply(h10, m0)

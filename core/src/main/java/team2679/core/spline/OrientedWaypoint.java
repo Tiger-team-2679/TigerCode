@@ -1,4 +1,4 @@
-package team2679.core.graph;
+package team2679.core.spline;
 
 import team2679.core.spline.Point;
 
