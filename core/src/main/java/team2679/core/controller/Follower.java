@@ -8,6 +8,7 @@ public class Follower {
     private PID pid;
     private double kv;
     private double ka;
+    private double ks;
 
     /**
      * @param graph Graph to follow.
@@ -15,12 +16,14 @@ public class Follower {
      * @param kv Velocity constant (not necessarily velocity, more precisely:
      *           the relation factor between the real values and desired ones).
      * @param ka Acceleration constant (A relation factor for to applied on the slope of the graph).
+     * @param ks Static constant for minimal possible value for the system to start move.
      */
-    public Follower(Graph graph, PID pid, double kv, double ka) {
+    public Follower(Graph graph, PID pid, double kv, double ka, double ks) {
         this.graph = graph;
         this.pid = pid;
         this.kv = kv;
         this.ka = ka;
+        this.ks = ks;
     }
 
     /**
@@ -32,6 +35,11 @@ public class Follower {
     public double update(double currentTime, double currentValue) {
         double target = graph.value(currentTime);
         double change = pid.update(currentTime, currentValue, target);
-        return kv * target + change + ka * graph.derivative(currentTime);
+        double value = kv * target + change + ka * graph.derivative(currentTime);
+        if (value != 0) {
+            return value + ks;
+        }else {
+            return 0;
+        }
     }
 }

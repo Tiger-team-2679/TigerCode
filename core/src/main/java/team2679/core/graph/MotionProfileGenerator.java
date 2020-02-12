@@ -48,14 +48,5 @@ public class MotionProfileGenerator {
         return new IntervalGraph(points, speedCap.step);
     }
 
-    public static Graph convertToTimeGraph(IntervalGraph<Double> distanceGraph) {
-        HashMap<Double, Double> points = new HashMap<>();
-        double time = 0;
-        for (double v : distanceGraph) {
-            points.put(time, v);
-            time += distanceGraph.step / v;
-        }
-        return new Graph(points);
-    }
 
 }
