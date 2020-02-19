@@ -10,15 +10,12 @@ import java.util.ArrayList;
  */
 public class RelativeSpeedGenerator {
     double width;
-    int dataPoints;
 
     /**
      * @param width The space between the wheels of the robot.
-     * @param dataPoints The amount of samples the graph will have on the x-axis.
      */
-    public RelativeSpeedGenerator(double width, int dataPoints) {
+    public RelativeSpeedGenerator(double width) {
         this.width = width;
-        this.dataPoints = dataPoints;
     }
 
     /**
