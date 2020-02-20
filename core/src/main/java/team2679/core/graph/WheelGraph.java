@@ -1,5 +1,6 @@
 package team2679.core.graph;
 
+import org.apache.commons.math3.util.Pair;
 import team2679.core.graph.GraphList;
 import team2679.core.graph.IntervalGraph;
 
@@ -8,32 +9,31 @@ import team2679.core.graph.IntervalGraph;
  */
 public class WheelGraph {
 
-    private GraphList wheels;
+    private IntervalGraph<Double>[] wheels = new IntervalGraph[2];
 
     /**
      * @param leftWheel The graph to assign for the left wheel.
      * @param rightWheel The graph to assign for the right wheel.
      */
     public WheelGraph(IntervalGraph<Double> leftWheel, IntervalGraph<Double> rightWheel) {
-        wheels = new GraphList();
-        wheels.set(leftWheel, 0);
-        wheels.set(rightWheel, 1);
+        wheels[0] = leftWheel;
+        wheels[1] = rightWheel;
     }
 
     public IntervalGraph<Double> getLeft() {
-        return wheels.get(0);
+        return wheels[0];
     }
 
     public void setLeft(IntervalGraph<Double> leftWheel) {
-        wheels.set(leftWheel, 0);
+        wheels[0] = leftWheel;
     }
 
     public IntervalGraph<Double> getRight() {
-        return wheels.get(1);
+        return wheels[1];
     }
 
     public void setRight(IntervalGraph<Double> rightWheel) {
-        wheels.set(rightWheel, 1);
+        wheels[1] = rightWheel;
     }
 
 }
