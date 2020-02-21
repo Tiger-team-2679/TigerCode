@@ -30,8 +30,16 @@ public class DifferentialDriveSC {
         IntervalGraph<WayPoint> points = spline.getIntervalGraph();
         ArrayList<Double> velocityPoints = new ArrayList<>();
         for (int i = 0; i < points.list.size(); i++) {
-            double radius = Math.abs(1 / points.list.get(i).curvature);
-            double averageSpeed = ((maxVelocity * (radius - (width / 2)) / (radius + (width / 2))) + maxVelocity) / 2;
+            double curvature = points.list.get(i).curvature;
+            double averageSpeed;
+
+            if (curvature == 0) {
+                averageSpeed = maxVelocity;
+            } else {
+                double radius = Math.abs(1 / curvature);
+                averageSpeed = ((maxVelocity * ((radius - (width / 2)) / (radius + (width / 2)))) + maxVelocity) / 2;
+            }
+            
             velocityPoints.add(averageSpeed);
         }
         return new IntervalGraph(velocityPoints, points.step);

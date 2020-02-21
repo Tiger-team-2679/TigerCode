@@ -29,10 +29,15 @@ public class RelativeSpeedGenerator {
         ArrayList<Double> right = new ArrayList();
         IntervalGraph<WayPoint> points = spline.getIntervalGraph();
         for (int i = 0; i < points.list.size(); i++) {
-            right.add((1 / points.list.get(i).curvature + width / 2) / (1 / points.list.get(i).curvature));
-        }
-        for (int i = 0; i < points.list.size(); i++) {
-            left.add((1 / points.list.get(i).curvature - width / 2) / (1 / points.list.get(i).curvature));
+            double curvature = points.list.get(i).curvature;
+            if (curvature == 0) {
+                right.add(1.);
+                left.add(1.);
+            } else {
+                double radius = 1/curvature;
+                right.add((radius + width / 2) / radius);
+                left.add((radius - width / 2) / radius);
+            }
         }
         return new WheelGraph(new IntervalGraph(left, points.step), new IntervalGraph(right, points.step));
     }
