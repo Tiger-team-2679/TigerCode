@@ -42,4 +42,8 @@ public class Follower {
             return 0;
         }
     }
+
+    public boolean isFinished(double currentTime) {
+        return graph.getRange().contains(currentTime);
+    }
 }
